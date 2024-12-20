@@ -2,7 +2,7 @@
 FROM node:22-alpine
 
 # Set the working directory
-WORKDIR /harsha_portfolio/
+WORKDIR /harsha_portfolio_frontend/
 
 # Copy the package.json and package-lock.json to the working directory
 COPY package*.json ./

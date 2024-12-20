@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "../components/Nav";
 import { BASE_URL } from "../config";
@@ -74,12 +74,12 @@ const DeleteNote = () => {
                 }}
               />
               <p className="title1" style={{ fontSize: "30px" }}>
-                Delete Note
+                Delete
               </p>
             </div>
           </div>
           <div className="flexcenter">
-            <p style={{ fontSize: "20px", fontWeight: "600" }}>
+            <p style={{ fontSize: "20px", fontWeight: "600", color: "white" }}>
               Are you sure you want to delete the Note?
             </p>
           </div>

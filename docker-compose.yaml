@@ -8,7 +8,8 @@ services:
     restart: unless-stopped
     env_file: ./note-nexus-backend/.env
     volumes:
-      - ./note-nexus-backend:/harsha_portfolio
+      - ./note-nexus-backend:/harsha_portfolio_backend
+      - /harsha_portfolio_backend/node_modules
     networks:
       - harsha-portfolio
     ports:
@@ -19,7 +20,9 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes: 
-      - ./note-nexus-frontend:/harsha_portfolio
+      - ./note-nexus-frontend:/harsha_portfolio_frontend
+      - /harsha_portfolio_frontend/node_modules
+
     networks:
       - harsha-portfolio
     command: npm start

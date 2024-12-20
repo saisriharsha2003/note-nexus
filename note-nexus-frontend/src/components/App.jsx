@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Main from "./Main";
 import Register from "./Register";
-import ProtectedLayout from "./ProtectedLayout";
 import Login from "./Login";
 import Home from "./Home";
 import AddNote from "./AddNote";

@@ -5,7 +5,7 @@ import user from "../assets/user.png";
 import edit from "../assets/edit.png";
 import delete1 from "../assets/delete.png";
 import logout from "../assets/logout.png";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/logo.png";
 
