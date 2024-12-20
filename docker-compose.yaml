@@ -1,0 +1,32 @@
+name: harsha_portfolio
+
+services:
+  backend:
+    build:
+      context: ./note-nexus-backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./note-nexus-backend/.env
+    volumes:
+      - ./note-nexus-backend:/harsha_portfolio
+    networks:
+      - harsha-portfolio
+    ports:
+      - 8080:8080
+  frontend:
+    build: 
+      context: ./note-nexus-frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes: 
+      - ./note-nexus-frontend:/harsha_portfolio
+    networks:
+      - harsha-portfolio
+    command: npm start
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+networks:
+  harsha-portfolio:
+    driver: bridge
