@@ -1,20 +1,20 @@
-# Use official Node 22-alpine version
-FROM node:22-alpine
+# Use a lightweight Node.js image
+FROM node:18-alpine
 
-# Set the working directory
-WORKDIR /harsha_portfolio_frontend/
+# Set the working directory inside the container
+WORKDIR /harsha_portfolio/frontend/
 
-# Copy the package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-# Install the dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy the entire frontend code to the container
 COPY . .
 
-# Expose the default port for React app (3000)
+# Expose the port React runs on
 EXPOSE 3000
 
-# Run the React development server using npm start
+# Command to run the app
 CMD ["npm", "start"]
