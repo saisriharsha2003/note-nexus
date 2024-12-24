@@ -5,6 +5,7 @@ const router = express.Router();
 router.route('/').get((req, res) => {
     res.send('Welcome to the NoteNexus!');
 });
+
 router.route('/register').post(signup);
 router.route('/login').post(signin);
 router.route('/add-note').post(add_note);
