@@ -1,6 +1,6 @@
-version: '3'
+version: '3.8'
 
-name: "harsha_portfolio"
+name: "note-nexus"
 
 services:
   backend:
@@ -8,9 +8,11 @@ services:
       context: ./note-nexus-backend
       dockerfile: Dockerfile
     restart: unless-stopped
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     env_file: ./note-nexus-backend/.env
     volumes:
-      - ./note-nexus-backend:/harsha_portfolio/backend
+      - ./note-nexus-backend:/note-nexus/backend
     networks:
       - network
     ports:
@@ -22,7 +24,9 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     volumes: 
-      - ./note-nexus-frontend:/harsha_portfolio/frontend
+      - ./note-nexus-frontend:/note-nexus/frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - network
     env_file: ./note-nexus-frontend/.env

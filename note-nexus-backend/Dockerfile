@@ -2,7 +2,7 @@
 FROM node:22-alpine
 
 # Set the working directory
-WORKDIR /harsha_portfolio/backend/
+WORKDIR /note-nexus/backend/
 
 # Copy the package.json and package-lock.json to the working directory
 COPY package*.json ./
