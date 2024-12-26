@@ -26,7 +26,7 @@ Ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository_url>
+git clone "https://github.com/saisriharsha2003/note-nexus"
 cd note-nexus
 ```
 
@@ -42,6 +42,9 @@ In the first terminal:
 cd note-nexus-frontend
 npm install
 ```
+
+In the second terminal:
+
 
 ```bash
 cd note-nexus-backend
@@ -67,6 +70,8 @@ In the first terminal:
 cd note-nexus-frontend
 npm start
 ```
+
+In the second terminal:
 
 ```bash
 cd note-nexus-backend
