@@ -34,6 +34,10 @@ cd note-nexus
 
 Run the following command to install all required packages:
 
+Open two separate terminals and run the following commands:
+
+In the first terminal:
+
 ```bash
 cd note-nexus-frontend
 npm install
@@ -54,6 +58,10 @@ JWT_SECRET=<Your JWT secret key>
 ```
 
 ### 4. Start the Application
+
+Open two separate terminals and run the following commands:
+
+In the first terminal:
 
 ```bash
 cd note-nexus-frontend
