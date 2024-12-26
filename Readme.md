@@ -16,17 +16,18 @@ A **collaborative note-taking application** where users can register, log in, an
 
 ---
 
-## Steps to Set Up and Run the Code
+## Steps to Set Up and Run the Code (Without Docker)
 
 ### Prerequisites:
 Ensure you have the following installed:
   - **Node.js** (v14+ recommended)
   - **MongoDB** (local or hosted)
 
+
 ### 1. Clone the Repository
 ```bash
 git clone <repository_url>
-cd NoteNexus
+cd note-nexus
 ```
 
 ### 2. Install Dependencies
@@ -65,6 +66,26 @@ npm start
 ```
 
 ### 5. Access the Application
+
+Open http://localhost:3000 in your browser to use the app.
+
+---
+
+## Steps to Set Up and Run the Code (With Docker Compose)
+
+### Prerequisites for Docker Compose
+
+Ensure you have the following installed:
+- **Docker**: Containerization platform for running applications in isolated environments.
+- **Docker Compose**: Tool for defining and running multi-container Docker applications.
+
+### 1. Build and Run with Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+### Access the Application
 
 Open http://localhost:3000 in your browser to use the app.
 
