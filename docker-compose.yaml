@@ -1,6 +1,6 @@
 version: '3.8'
 
-name: "note-nexus"
+name: "saisriharsha/note-nexus"
 
 services:
   backend:
@@ -8,6 +8,7 @@ services:
       context: ./note-nexus-backend
       dockerfile: Dockerfile
     restart: unless-stopped
+    image: saisriharsha2005/note-nexus-backend
     environment:
       - CHOKIDAR_USEPOLLING=true
     env_file: ./note-nexus-backend/.env
@@ -23,6 +24,7 @@ services:
       context: ./note-nexus-frontend
       dockerfile: Dockerfile
     restart: unless-stopped
+    image: saisriharsha2005/note-nexus-frontend
     volumes: 
       - ./note-nexus-frontend:/note-nexus/frontend
     environment:
