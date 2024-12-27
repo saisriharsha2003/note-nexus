@@ -1,23 +1,37 @@
-# Use official Node 22-alpine version
-FROM node:22-alpine
+# Stage 1: Build
+# Use a lightweight Node.js image
+FROM alpine:3.18 AS build
 
-# Set the working directory
+# Install Node.js runtime
+RUN apk add --no-cache nodejs npm
+
+# Set the working directory inside the container
 WORKDIR /note-nexus/backend/
 
-# Copy the package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-# Install the dependencies
-RUN npm install
+# Install dependencies
+RUN npm ci && npm install -g nodemon
 
-# Install nodemon globally
-RUN npm install -g nodemon
-
-# Copy the rest of the application code to the working directory
+# Copy the entire backend code to the container
 COPY . .
 
-# Expose the default port for React app (8080)
-EXPOSE 8080
+# Stage 2: Production
+# Use a minimal base image
+FROM alpine:3.18
 
-# Run the React development server using npm start
-CMD ["npm", "start"]
+# Install Node.js runtime and nodemon globally
+RUN apk add --no-cache nodejs npm && npm install -g nodemon
+
+# Set the working directory inside the container
+WORKDIR /note-nexus/backend/
+
+# Copy the files from the build stage
+COPY --from=build /note-nexus/backend/ .
+
+# Expose the port
+EXPOSE 3000
+
+# Command to run the app
+CMD ["nodemon", "index.js"]
