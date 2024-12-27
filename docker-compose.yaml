@@ -1,5 +1,3 @@
-version: '3.8'
-
 name: "saisriharsha/note-nexus"
 
 services:
