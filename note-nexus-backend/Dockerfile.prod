@@ -1,8 +1,8 @@
 # Stage 1: Build the Backend Application
-FROM node:20-alpine AS build
+FROM alpine:3.18 AS development
 
-# Set the working directory inside the container
-WORKDIR /note-nexus/backend/
+# Install Node.js, npm, and other necessary tools
+RUN apk add --no-cache nodejs npm
 
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
@@ -14,7 +14,10 @@ RUN npm ci && npm install -g nodemon
 COPY . .
 
 # Stage 2: Production Ready Minimal Image
-FROM node:20-alpine
+FROM alpine:3.18 AS production
+
+# Install Node.js, npm, and other necessary tools
+RUN apk add --no-cache nodejs npm
 
 # Set the working directory inside the container
 WORKDIR /note-nexus/backend/

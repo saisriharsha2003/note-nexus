@@ -1,5 +1,8 @@
 # Stage 1: Build the React App
-FROM node:20-alpine AS build
+FROM alpine:3.18 AS development
+
+# Install Node.js, npm, and other necessary tools
+RUN apk add --no-cache nodejs npm
 
 # Set the working directory
 WORKDIR /note-nexus/frontend/

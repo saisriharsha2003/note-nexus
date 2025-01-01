@@ -14,8 +14,7 @@ COPY package*.json ./
 RUN npm install --no-cache
 
 # Copy only necessary source files
-COPY public ./public
-COPY src ./src
+COPY . .
 
 # Expose the React development server port
 EXPOSE 3000
