@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./note-nexus-backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     restart: unless-stopped
     image: saisriharsha2005/note-nexus-backend
     environment:
@@ -20,7 +20,7 @@ services:
   frontend:
     build: 
       context: ./note-nexus-frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: saisriharsha2005/note-nexus-frontend
     restart: unless-stopped
     volumes: 

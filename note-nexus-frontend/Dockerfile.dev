@@ -1,0 +1,24 @@
+# Stage 1: Base Image for Development
+FROM alpine:3.18 AS development
+
+# Install Node.js, npm, and other necessary tools
+RUN apk add --no-cache nodejs npm
+
+# Set the working directory
+WORKDIR /note-nexus/frontend/
+
+# Copy only package.json and package-lock.json to install dependencies
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --no-cache
+
+# Copy only necessary source files
+COPY public ./public
+COPY src ./src
+
+# Expose the React development server port
+EXPOSE 3000
+
+# Command to run the development server with hot reloading
+CMD ["npm", "start"]

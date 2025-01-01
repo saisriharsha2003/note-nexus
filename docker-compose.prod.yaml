@@ -1,0 +1,40 @@
+name: "note-nexus"
+
+services:
+  backend:
+    build:
+      context: ./note-nexus-backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    image: saisriharsha/note-nexus-backend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file: ./note-nexus-backend/.env
+    volumes:
+      - ./note-nexus-backend:/note-nexus/backend
+    networks:
+      - network
+    ports:
+      - 8080:8080
+
+  frontend:
+    build: 
+      context: ./note-nexus-frontend
+      dockerfile: Dockerfile.prod
+    image: saisriharsha/note-nexus-frontend
+    restart: unless-stopped
+    volumes: 
+      - ./note-nexus-frontend:/note-nexus/frontend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - network
+    env_file: ./note-nexus-frontend/.env
+    depends_on:
+      - backend
+    ports:
+      - 80:80
+
+networks:
+  network:
+    driver: bridge
