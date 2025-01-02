@@ -6,7 +6,7 @@ services:
       context: ./note-nexus-backend
       dockerfile: Dockerfile.prod
     restart: unless-stopped
-    image: saisriharsha/note-nexus-backend
+    image: saisriharsha2005/note-nexus-backend
     environment:
       - CHOKIDAR_USEPOLLING=true
     env_file: ./note-nexus-backend/.env
@@ -21,7 +21,7 @@ services:
     build: 
       context: ./note-nexus-frontend
       dockerfile: Dockerfile.prod
-    image: saisriharsha/note-nexus-frontend
+    image: saisriharsha2005/note-nexus-frontend
     restart: unless-stopped
     volumes: 
       - ./note-nexus-frontend:/note-nexus/frontend
