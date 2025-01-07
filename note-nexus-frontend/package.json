@@ -23,10 +23,10 @@
     "webpack": "^5.95.0"
   },
   "scripts": {
-    "start": "WDS_SOCKET_HOST=127.0.0.1  CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts start",
-    "build": "WDS_SOCKET_HOST=127.0.0.1  CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts build",
-    "test": "WDS_SOCKET_HOST=127.0.0.1  CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts test",
-    "eject": "WDS_SOCKET_HOST=127.0.0.1  CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts eject"
+    "start": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts start",
+    "build": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts build",
+    "test": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts test",
+    "eject": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
