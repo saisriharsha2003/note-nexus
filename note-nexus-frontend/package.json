@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
+    "cross-env": "^7.0.3",
     "font-awesome": "^4.7.0",
     "postcss": "^8.4.47",
     "react": "^18.2.0",
@@ -23,8 +24,8 @@
     "webpack": "^5.95.0"
   },
   "scripts": {
-    "start": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts start",
-    "build": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts build",
+    "start": "cross-env CHOKIDAR_USEPOLLING=true react-scripts start --host 0.0.0.0",
+    "build": "cross-env CHOKIDAR_USEPOLLING=true react-scripts build --host 0.0.0.0",
     "test": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts test",
     "eject": "WDS_SOCKET_HOST=127.0.0.1 CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true react-scripts eject"
   },
