@@ -6,7 +6,7 @@ import Nav from "../components/Nav";
 import { BASE_URL } from "../config";
 import { useParams, useNavigate } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
-import sureImage from "../assets/sure.png";
+import sureImage from "../assets/images/sure.png";
 
 const DeleteNote = () => {
   const { id } = useParams();

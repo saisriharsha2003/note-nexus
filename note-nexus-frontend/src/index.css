@@ -231,7 +231,7 @@ body{
 }
 .signup
 {
- 	background: url(assets/image1.jpg);
+ 	background: url(assets/images/background_image.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	display: flex;
@@ -778,7 +778,7 @@ nav ul li .dropdown-content a {
 
 .bg1
 {
-	background: url(assets/image1.jpg);
+	background: url(assets/images/background_image.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	display: flex;

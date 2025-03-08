@@ -1,5 +1,3 @@
-name: "saisriharsha/note-nexus"
-
 services:
   backend:
     build:
@@ -11,7 +9,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
     env_file: ./note-nexus-backend/.env
     volumes:
-      - ./note-nexus-backend:/note-nexus/backend
+      - ./note-nexus-backend:/note-nexus-backend
+      - /note-nexus-backend/node_modules  
     networks:
       - network
     ports:
@@ -24,9 +23,10 @@ services:
     image: saisriharsha2005/note-nexus-frontend
     restart: unless-stopped
     volumes: 
-      - ./note-nexus-frontend:/note-nexus/frontend
+      - ./note-nexus-frontend:/note-nexus-frontend
+      - /note-nexus-frontend/node_modules  
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_USEPOLLING=true 
     networks:
       - network
     env_file: ./note-nexus-frontend/.env

@@ -27,6 +27,6 @@ mongoose.connect(mongoURI, {
 
 app.use("/api/user", userRouter);
 
-const server = app.listen(port, () => {
+const server = app.listen(port, "0.0.0.0", () => {
   console.log("Server started on port "+port);
 });

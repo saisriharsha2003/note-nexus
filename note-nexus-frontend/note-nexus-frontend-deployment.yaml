@@ -2,22 +2,27 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: note-nexus-frontend-deployment
+  labels:
+    tier: note-nexus-frontend_deployment
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: note-nexus_frontend
   template:
     metadata:
+      name: note-nexus-frontend-pod
       labels:
-        app: note-nexus_frontend
+        tier: note-nexus-frontend_pod
     spec:
       containers:
         - name: note-nexus-frontend
           image: saisriharsha2005/note-nexus-frontend:latest
-          ports:
-            - containerPort: 80
-          env:  
+          env:
           - name: CHOKIDAR_USEPOLLING
             value: "true"
+          ports:
+          - containerPort: 80
+  replicas: 2
+  selector:
+    matchLabels: 
+      tier: note-nexus-frontend_pod
+      
+
 

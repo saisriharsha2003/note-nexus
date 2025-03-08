@@ -1,12 +1,15 @@
-apiVersion: v1
+apiVersion: v1 
 kind: Service
 metadata:
   name: note-nexus-frontend-service
+  labels:
+    type: note-nexus-frontend_service
 spec:
   selector:
-    app: note-nexus_frontend
+      tier: note-nexus-frontend_pod
+  type: NodePort
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 80
       targetPort: 80
-  type: LoadBalancer
+      nodePort: 30080
+  

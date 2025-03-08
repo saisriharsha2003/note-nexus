@@ -1,23 +1,23 @@
-# Stage 1: Base Image for Development
-FROM alpine:3.18 AS development
+# Use an official Node.js image instead of Alpine
+FROM node:18
 
-# Install Node.js, npm, and other necessary tools
-RUN apk add --no-cache nodejs npm
+# Set the working directory inside the container
+WORKDIR /note-nexus-frontend
 
-# Set the working directory
-WORKDIR /note-nexus/frontend/
-
-# Copy only package.json and package-lock.json to install dependencies
+# Copy package.json and package-lock.json first for caching
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --no-cache
+RUN npm install
 
-# Copy only necessary source files
+# Copy the entire frontend source code
 COPY . .
+
+# Set environment variable for hot reloading
+ENV CHOKIDAR_USEPOLLING=true
 
 # Expose the React development server port
 EXPOSE 3000
 
-# Command to run the development server with hot reloading
+# Start the React app
 CMD ["npm", "start"]

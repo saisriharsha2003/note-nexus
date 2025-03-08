@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
-import user from "../assets/user.png";
-import edit from "../assets/edit.png";
-import delete1 from "../assets/delete.png";
-import logout from "../assets/logout.png";
+import user from "../assets/images/user.png";
+import edit from "../assets/images/edit.png";
+import delete1 from "../assets/images/delete.png";
+import logout from "../assets/images/logout.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/images/logo.png";
 
 const Nav = () => {
   const [userName, setUserName] = useState("");

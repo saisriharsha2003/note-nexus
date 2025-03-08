@@ -161,7 +161,7 @@ Frontend:
 
 - **`note-nexus-frontend/src/index.css`**: Manages the overall styling of the application, including layout, typography, and theme.
 
-- **`note-nexus-frontend/src/assets/`**: Folder containing all images and media files necessary for the application.
+- **`note-nexus-frontend/src/assets/images/`**: Folder containing all images and media files necessary for the application.
 
 - **`note-nexus-frontend/src/config.js`**: Contains the base URL for the API. The `BASE_URL` can be set to either a local server URL (`http://localhost:8080`) for development or a production server URL (`https://note-nexus.onrender.com`) for deployment. 
 

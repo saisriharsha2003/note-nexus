@@ -2,19 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: note-nexus-backend-deployment
+  labels:
+    tier: note-nexus-backend_deployment
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: note-nexus_backend
   template:
     metadata:
+      name: note-nexus-backend-pod
       labels:
-        app: note-nexus_backend
+        tier: note-nexus-backend_pod
     spec:
       containers:
-        - name: note-nexus-backend
-          image: saisriharsha2005/note-nexus-backend:latest
-          ports:
-            - containerPort: 8080
-
+      - name: note-nexus-backend
+        image: saisriharsha2005/note-nexus-backend:latest
+        ports:
+        - containerPort: 8080
+  replicas: 2
+  selector:
+    matchLabels: 
+      tier: note-nexus-backend_pod
+      

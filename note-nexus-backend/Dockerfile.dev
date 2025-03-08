@@ -5,7 +5,7 @@ FROM alpine:3.18 AS development
 RUN apk add --no-cache nodejs npm
 
 # Set the working directory
-WORKDIR /note-nexus/backend/
+WORKDIR /note-nexus-backend/
 
 # Copy only package.json and package-lock.json to install dependencies
 COPY package*.json ./
