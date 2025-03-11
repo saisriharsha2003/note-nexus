@@ -1,0 +1,241 @@
+.addnote-container {
+  background: url(../images/background_image.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 105vh;
+  width: 100%;
+}
+
+.addnote-box {
+  background: black;
+  opacity: 0.9;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #ccba78;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.addnote-box .title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ccba78;
+  margin-bottom: 20px;
+}
+
+.addnote-box .addnote-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.addnote-box .input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.addnote-box .input-group:hover {
+  transform: scale(1.05);
+}
+
+.addnote-box .icon {
+  color: #ccba78;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.addnote-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+}
+
+.addnote-box input::placeholder {
+    color: white;
+    font-style: italic;
+    font-size: 13px;
+  }
+
+.ql-editor.ql-blank::before {
+  color: white !important;
+  font-style: italic;
+}
+
+.addnote-box .quill-container {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.addnote-box .quill-container .ql-editor {
+  min-height: 150px;
+  color: white;
+}
+
+.ql-toolbar .ql-picker-label svg,
+.ql-toolbar .ql-stroke,
+.ql-toolbar .ql-fill {
+  stroke: white !important;
+  fill: white !important;
+}
+
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-options {
+  color: white !important;
+}
+
+.ql-toolbar .ql-picker-options {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid white !important;
+}
+
+.ql-toolbar button,
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item {
+  color: white !important;
+}
+
+.ql-toolbar .ql-active,
+.ql-toolbar .ql-picker.ql-expanded .ql-picker-label {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 5px;
+}
+
+.addnote-box .visibility-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+  color: white;
+}
+
+.addnote-box .visibility-options label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease-in-out;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+}
+
+.addnote-box .visibility-options input[type="radio"] {
+  display: none;
+}
+
+.addnote-box .visibility-options label span {
+  position: relative;
+  padding-left: 25px;
+}
+
+.addnote-box .visibility-options label span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transform: translateY(-50%);
+}
+
+.addnote-box .visibility-options input[type="radio"]:checked + span::before {
+  background: #ccba78;
+  border-color: #ccba78;
+}
+
+.addnote-box .visibility-options label:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.15) rotate(3deg);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.addnote-box .visibility-options input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, #008b8b, #ccba78);
+  color: black;
+  font-weight: bold;
+  transform: scale(1.2) rotate(-3deg);
+  box-shadow: 0 0 20px #ccba78;
+}
+
+.addnote-box .addnote-btn {
+  background: linear-gradient(135deg, #008b8b, #ccba78);
+  border: none;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  width: 100%;
+}
+
+.addnote-box .addnote-btn:hover {
+  transform: scale(1.1) rotate(-2deg);
+  background: linear-gradient(-135deg, #008b8b, #ccba78);
+}
+
+.visibility-options {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+  justify-content: center;
+}
+
+.visibility-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.visibility-label input {
+  display: none;
+}
+
+.visibility-icon {
+  font-size: 20px;
+}
+
+.visibility-label.selected {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
