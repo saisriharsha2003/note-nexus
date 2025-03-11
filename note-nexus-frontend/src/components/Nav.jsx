@@ -8,6 +8,7 @@ import logout from "../assets/images/logout.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/images/logo.png";
+import "../assets/styles/nav.css";
 
 const Nav = () => {
   const [userName, setUserName] = useState("");
@@ -71,7 +72,7 @@ const Nav = () => {
                 alt="User"
                 style={{ width: "80px", height: "80px" }}
               />
-              <h2 id="cu_name" style={{ color: "#CCBA78" }}>
+              <h2 id="cu_name" style={{ color: "#00FFFF" }}>
                 {userName}
               </h2>
             </div>
@@ -83,6 +84,15 @@ const Nav = () => {
                 style={{ width: "50px", height: "50px" }}
               />
               <p>Edit Profile</p>
+              <span className="ext">&gt;</span>
+            </Link>
+            <Link to="/change-password" className="sub-menu-link">
+              <img
+                src={edit}
+                alt="Change Password"
+                style={{ width: "50px", height: "50px" }}
+              />
+              <p>Change Password</p>
               <span className="ext">&gt;</span>
             </Link>
             <Link to="/" className="sub-menu-link" onClick={handleLogout}>
