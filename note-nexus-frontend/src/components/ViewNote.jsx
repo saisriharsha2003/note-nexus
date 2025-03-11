@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom"; 
+import { useParams, useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
 import { BASE_URL } from "../config";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.bubble.css"; 
+import "react-quill/dist/quill.bubble.css";
+import { motion } from "framer-motion";
+import "../assets/styles/viewnote.css";
 
 const ViewNote = () => {
-  const { id } = useParams(); 
-  const navigate = useNavigate(); 
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const modules = {
-    toolbar: false, 
+    toolbar: false,
   };
 
   useEffect(() => {
@@ -34,46 +36,82 @@ const ViewNote = () => {
   return (
     <div>
       <Nav />
-      <div className="bg1">
-        <div className="container">
-          <h2 className="title">View Note</h2>
-          <form>
-            <div className="user-details">
-              <div className="input-box1 w-full mb-4">
-                <label className="text-[#CCBA78] pb-2 block mb-2">Title</label>
-                <input
+
+      <motion.div
+        className="view-note-container"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <div className="view-note-box">
+          <motion.h2
+            className="title"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            View Note
+          </motion.h2>
+
+          {loading ? (
+            <motion.p
+              className="loading-text"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              Loading note...
+            </motion.p>
+          ) : (
+            <motion.form
+              className="view-note-form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="input-box">
+                <label className="label">Title</label>
+                <motion.input
                   type="text"
                   value={note?.title || ""}
                   readOnly
-                  className="w-full p-2 border"
+                  className="title-input"
+                  whileHover={{ scale: 1.05 }}
                 />
               </div>
-              <div className="input-box1 w-full pb-4">
-                <label className="text-[#CCBA78] block mb-2">Content</label>
-                <ReactQuill
-                  value={note?.content || ""}
-                  readOnly={true}
-                  theme="bubble"
-                  modules={modules}
-                  className="h-48 mb-4 text-white"
-                />
+
+              <div className="input-box">
+                <label className="label">Content</label>
+                <motion.div
+                  className="content-display"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <ReactQuill
+                    value={note?.content || ""}
+                    readOnly={true}
+                    theme="bubble"
+                    modules={modules}
+                    className="quill-content"
+                  />
+                </motion.div>
               </div>
-            </div>
-            <div className="button">
-              <button
+
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 type="button"
-                id="aButton"
                 onClick={() => navigate("/view-notes")}
-                style={{
-                  cursor: "pointer",
-                }}
+                className="back-button"
               >
                 Back to View Notes
-              </button>
-            </div>
-          </form>
+              </motion.button>
+            </motion.form>
+          )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

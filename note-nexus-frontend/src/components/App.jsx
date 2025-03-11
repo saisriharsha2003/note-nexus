@@ -11,6 +11,9 @@ import EditNote from "./EditNote";
 import DeleteNote from "./DeleteNote";
 import EditProfile from "./EditProfile";
 import ChangePassword from "./ChangePassword";
+import ResetPassword from "./ResetPassword";
+import VerifyCode from "./VerifyCode";
+import NewPassword from "./NewPassword";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
         <Route path="/delete-note/:id" element={<DeleteNote />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/reset-password" element={<ResetPassword/>} />
+        <Route path="/verify-code" element={<VerifyCode />} />
+        <Route path="/new-password" element={<NewPassword />} />
       </Routes>
       <ToastContainer />
     </div>

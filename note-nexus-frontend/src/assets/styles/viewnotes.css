@@ -1,0 +1,141 @@
+.view-notes-wrapper {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f9;
+  min-height: 100vh;
+}
+
+.view-notes-container {
+    background: black;
+    opacity: 0.9;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #ccba78;
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.notes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+
+}
+
+.notes-table th,
+.notes-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  color: white;
+}
+
+.notes-table th {
+  background-color: #ccba78;
+  color: white;
+  font-weight: bold;
+}
+
+.notes-table tr:hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.read-more-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.read-more-btn:hover {
+  color: #0056b3;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.action-buttons i {
+  font-size: 1.5rem;
+}
+
+.view-btn i {
+  color: #28a745;
+}
+
+.edit-btn i {
+  color: #ffc107;
+}
+
+.delete-btn i {
+  color: #dc3545;
+}
+
+.action-buttons button:hover {
+  transform: scale(1.2);
+}
+
+/* No Notes Message */
+.no-notes-text {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #777;
+  padding: 15px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 8px;
+}
+
+.pagination-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.pagination-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
+}
+
+.pagination-btn.active {
+  background-color: #28a745;
+}
