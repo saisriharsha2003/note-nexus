@@ -1,17 +1,18 @@
-const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const cors = require("cors");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import { MONGODB_URL } from "./config.js";
+
 const app = express();
 
-const port = process.env.PORT || 8080;
+const port = 8080;
 
 app.use(express.json());
 app.use(cors());
 
-const userRouter = require("./routes/Routes");
+import userRouter from "./routes/Routes.js";
 
-const mongoURI = process.env.MONGODB_URL;
+const mongoURI = MONGODB_URL;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

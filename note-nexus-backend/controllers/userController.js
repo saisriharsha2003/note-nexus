@@ -1,10 +1,14 @@
-const { StatusCodes } = require('http-status-codes');
-const User = require('../models/User');
-const Note = require('../models/Note');
-const jwt = require('jsonwebtoken');
-const bcrypt = require("bcryptjs");
+import { StatusCodes } from "http-status-codes";
+import User from "../models/User.js";
+import Note from "../models/Note.js"; 
+import jwt from "jsonwebtoken";
+import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, EMAIL_USER, JWT_SECRET, REDIRECT_URI } from "../config.js";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+import { OAuth2Client } from "google-auth-library";
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   const { name, email, mobile, uname, password } = req.body;
 
   try {
@@ -32,7 +36,7 @@ const signup = async (req, res) => {
   }
 };
 
-const signin = async (req, res) => {
+export const signin = async (req, res) => {
   const { uname, password } = req.body;
 
   try {
@@ -48,7 +52,7 @@ const signin = async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -58,7 +62,97 @@ const signin = async (req, res) => {
   }
 };
 
-const add_note = async (req, res) => {
+const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+async function sendResetEmail(email, resetCode) {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: EMAIL_USER,
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken.token, 
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"NoteNexus" <${EMAIL_USER}>`,
+      to: email,
+      subject: "Password Reset Code",
+      text: `Your password reset code is: ${resetCode}`,
+    });
+
+  } catch (error) {
+    console.error("❌ Error sending email:", error);
+    throw new Error("Email could not be sent.");
+  }
+}
+
+export const resetPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: "User not found" });
+
+    const resetCode = crypto.randomInt(100000, 999999).toString();
+    const hashedCode = await bcrypt.hash(resetCode, 10);
+
+    user.resetPasswordCode = hashedCode;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; 
+    await user.save();
+
+    await sendResetEmail(email, resetCode);
+
+    res.json({ message: "Verification code sent to email" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Verification code not sent" });
+  }
+};
+
+export const verifyCode = async (req, res) => {
+  const {reset_email, code } = req.body;
+  try {
+    const user = await User.findOne({ email: reset_email });
+    if (!user || !user.resetPasswordCode) return res.status(400).json({ error: "Invalid request" });
+
+    const isMatch = await bcrypt.compare(code, user.resetPasswordCode);
+    if (!isMatch || Date.now() > user.resetPasswordExpires) {
+      return res.status(400).json({ error: "Invalid or expired code" });
+    }
+
+    res.json({ message: "Code verified, proceeding to update password" });
+  } catch (error) {
+    res.status(500).json({ error: "Error verifying code" });
+  }
+
+};
+
+export const newPassword = async (req, res) => {
+  const { reset_email, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ email: reset_email });
+    if (!user) return res.status(400).json({ error: "User not found" });
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordCode = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    res.status(500).json({ error: "Error resetting password" });
+  }
+
+};
+
+export const add_note = async (req, res) => {
   try {
 
     const { title, content, visibility } = req.body;
@@ -101,7 +195,7 @@ const add_note = async (req, res) => {
   }
 };
 
-const view_notes = async (req, res) => {
+export const view_notes = async (req, res) => {
   try {
     const uname = req.query.username; 
     
@@ -119,7 +213,7 @@ const view_notes = async (req, res) => {
 };
 
 
-const view_note_by_id = async (req, res) => {
+export const view_note_by_id = async (req, res) => {
   const { noteid } = req.params;
 
   try {
@@ -136,7 +230,7 @@ const view_note_by_id = async (req, res) => {
   }
 };
 
-const edit_note = async (req, res) => {
+export const edit_note = async (req, res) => {
   const { id, title, content, lastEditedBy, visibility } = req.body;
 
   try {
@@ -160,7 +254,7 @@ const edit_note = async (req, res) => {
   }
 };
 
-const delete_note = async (req, res) => {
+export const delete_note = async (req, res) => {
   const { id } = req.params; 
   const { username } = req.query;
 
@@ -197,7 +291,7 @@ const delete_note = async (req, res) => {
 };
 
 
-const getUserProfile = async (req, res) => {
+export const getUserProfile = async (req, res) => {
   try {
     const { uname } = req.params; 
 
@@ -219,7 +313,7 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-const updateUserProfile = async (req, res) => {
+export const updateUserProfile = async (req, res) => {
   const { uname } = req.params; 
   const { name, email, mobile, newUname } = req.body; 
 
@@ -288,7 +382,7 @@ const updateUserProfile = async (req, res) => {
 };
 
 
-const updatePassword = async (req, res) => {
+export const updatePassword = async (req, res) => {
   try {
     const { uname } = req.params;
     const { currentPassword, newPassword } = req.body;
@@ -316,5 +410,3 @@ const updatePassword = async (req, res) => {
   }
 };
 
-
-module.exports = { signup, signin, add_note, view_notes, view_note_by_id, edit_note, delete_note, getUserProfile, updatePassword, updateUserProfile};
