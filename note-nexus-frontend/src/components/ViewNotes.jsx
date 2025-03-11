@@ -6,6 +6,8 @@ import Nav from "../components/Nav";
 import { BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
+import { motion } from "framer-motion";
+import "../assets/styles/viewnotes.css";
 
 const ViewNotes = () => {
   const [notes, setNotes] = useState([]);
@@ -13,7 +15,6 @@ const ViewNotes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const notesPerPage = 4;
   const navigate = useNavigate();
-
   const MAX_CONTENT_LENGTH = 20;
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const ViewNotes = () => {
   }, []);
 
   const handleEdit = (noteId) => navigate(`/edit-note/${noteId}`);
-  const handleDelete = async (noteId) => navigate(`/delete-note/${noteId}`);
+  const handleDelete = (noteId) => navigate(`/delete-note/${noteId}`);
   const handleView = (noteId) => navigate(`/view-note/${noteId}`);
 
   const lastNoteIndex = currentPage * notesPerPage;
@@ -66,102 +67,60 @@ const ViewNotes = () => {
 
   const changePage = (newPage) => setCurrentPage(newPage);
 
-  const renderPagination = () => {
-    const pages = [];
-    const maxPagesToShow = 3;
-    const half = Math.floor(maxPagesToShow / 2);
-
-    let startPage = Math.max(1, currentPage - half);
-    let endPage = startPage + maxPagesToShow - 1;
-
-    if (endPage > totalPages) {
-      endPage = totalPages;
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-
-    if (startPage > 1) {
-      pages.push(
-        <button
-          key={1}
-          onClick={() => changePage(1)}
-          className="pagination-btn"
-        >
-          1
-        </button>
-      );
-      if (startPage > 2) {
-        pages.push(
-          <span key="start-ellipsis" className="ellipsis">
-            ...
-          </span>
-        );
-      }
-    }
-
-    for (let page = startPage; page <= endPage; page++) {
-      pages.push(
-        <button
-          key={page}
-          onClick={() => changePage(page)}
-          className={`pagination-btn ${
-            page === currentPage ? "active-page" : ""
-          }`}
-        >
-          {page}
-        </button>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pages.push(
-          <span key="end-ellipsis" className="ellipsis">
-            ...
-          </span>
-        );
-      }
-      pages.push(
-        <button
-          key={totalPages}
-          onClick={() => changePage(totalPages)}
-          className="pagination-btn"
-        >
-          {totalPages}
-        </button>
-      );
-    }
-
-    return pages;
-  };
-
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="view-notes-wrapper"
+    >
       <Nav />
-      <div className="bg1">
-        <div className="container" style={{ maxWidth: "1000px" }}>
+      <motion.div
+        className="bg1"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <motion.div
+          className="container view-notes-container"
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="title">All Notes</h2>
 
           {loading ? (
-            <p>Loading notes...</p>
+            <p className="loading-text">Loading notes...</p>
           ) : (
             <>
-              <table className="paybill w-full">
+              <motion.table
+                className="notes-table"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+              >
                 <thead>
                   <tr>
-                    <th className="w-full text-black">Author</th>
-                    <th className="w-full text-black">Title</th>
-                    <th className="w-full text-black">Content</th>
-                    <th className="w-full text-black">Last Edited By</th>
-                    <th className="w-full text-black">Actions</th>
+                    <th>Author</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Last Edited By</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentNotes.length > 0 ? (
-                    currentNotes.map((note) => (
-                      <tr key={note._id}>
-                        <td className="w-full">{note.owner}</td>
-                        <td className="w-full">{note.title}</td>
-                        <td className="w-full">
+                    currentNotes.map((note, index) => (
+                      <motion.tr
+                        key={note._id}
+                        className="note-row"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <td>{note.owner}</td>
+                        <td>{note.title}</td>
+                        <td>
                           <div
                             dangerouslySetInnerHTML={{
                               __html:
@@ -176,82 +135,84 @@ const ViewNotes = () => {
                           {note.content.length > MAX_CONTENT_LENGTH && (
                             <button
                               onClick={() => handleView(note._id)}
-                              className="text-blue-500 ml-2"
+                              className="read-more-btn"
                             >
                               Read More
                             </button>
                           )}
                         </td>
-                        <td className="w-full">{note.lastEditedBy}</td>
-                        <td className="w-full">
-                          <button
+                        <td>{note.lastEditedBy}</td>
+                        <td className="action-buttons">
+                          <motion.button
+                            whileHover={{ scale: 1.2 }}
                             onClick={() => handleView(note._id)}
-                            className="mr-4 text-blue-500"
+                            className="view-btn"
                           >
-                            <i
-                              className="fa fa-eye text-3xl"
-                              aria-hidden="true"
-                            ></i>
-                          </button>
-                          <button
+                            <i className="fa fa-eye"></i>
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.2 }}
                             onClick={() => handleEdit(note._id)}
-                            className="mr-4"
+                            className="edit-btn"
                           >
-                            <i
-                              className="fa fa-pencil text-3xl"
-                              aria-hidden="true"
-                            ></i>
-                          </button>
-                          <button
+                            <i className="fa fa-pencil"></i>
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.9 }}
                             onClick={() => handleDelete(note._id)}
-                            className="text-red-500"
+                            className="delete-btn"
                           >
-                            <i
-                              className="fa fa-trash text-3xl"
-                              aria-hidden="true"
-                            ></i>
-                          </button>
+                            <i className="fa fa-trash"></i>
+                          </motion.button>
                         </td>
-                      </tr>
+                      </motion.tr>
                     ))
                   ) : (
                     <tr>
-                      <td
-                        colSpan="5"
-                        style={{ textAlign: "center", padding: "10px" }}
-                      >
+                      <td colSpan="5" className="no-notes-text">
                         No notes found.
                       </td>
                     </tr>
                   )}
                 </tbody>
-              </table>
+              </motion.table>
 
-              {/* Pagination */}
-              <div className="flex justify-end my-4 items-center space-x-1">
+              <motion.div className="pagination">
                 {currentPage > 1 && (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
                     onClick={() => changePage(currentPage - 1)}
                     className="pagination-btn"
                   >
                     Previous
-                  </button>
+                  </motion.button>
                 )}
-                {renderPagination()}
+                {[...Array(totalPages)].map((_, i) => (
+                  <motion.button
+                    key={i + 1}
+                    whileHover={{ scale: 1.1 }}
+                    onClick={() => changePage(i + 1)}
+                    className={`pagination-btn ${currentPage === i + 1 ? "active" : ""}`}
+                  >
+                    {i + 1}
+                  </motion.button>
+                ))}
                 {currentPage < totalPages && (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
                     onClick={() => changePage(currentPage + 1)}
                     className="pagination-btn"
                   >
                     Next
-                  </button>
+                  </motion.button>
                 )}
-              </div>
+              </motion.div>
             </>
           )}
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
