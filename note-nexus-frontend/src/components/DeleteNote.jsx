@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "../components/Nav";
 import { BASE_URL } from "../config";
 import { useParams, useNavigate } from "react-router-dom";
-import "font-awesome/css/font-awesome.min.css";
 import sureImage from "../assets/images/sure.png";
+import { motion } from "framer-motion";
+import "../assets/styles/deletenote.css";
 
 const DeleteNote = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const user = localStorage.getItem("username");
 
   const handleCancel = () => {
@@ -20,95 +20,52 @@ const DeleteNote = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${BASE_URL}/api/user/delete-note/${id}`,
-        { params: { username: user } }
-      );
+      const response = await axios.delete(`${BASE_URL}/api/user/delete-note/${id}`, {
+        params: { username: user },
+      });
 
       toast.success(response.data.message, {
         position: "top-right",
-          autoClose: 1500
-        });
+        autoClose: 1500,
+      });
+
       setTimeout(() => {
-        toast.success("Redirecting to View Notes...", {
-          position: "top-right",
-        });
-        setTimeout(() => {
-          navigate("/view-notes");
-        }, 1000);
-      }, 1000);
+        navigate("/view-notes");
+      }, 2000);
     } catch (error) {
-      if (error.response && error.response.status === 403) {
-        toast.error("You are not authorized to delete this note.", {
-          position: "top-right",
-        });
-      } else {
-        toast.error("Failed to delete note.", {
-          position: "top-right",
-        });
-      }
+      toast.error(
+        error.response?.status === 403
+          ? "You are not authorized to delete this note."
+          : "Failed to delete note.",
+        { position: "top-right" }
+      );
     }
   };
 
   return (
     <div>
       <Nav />
-      <div className="signup">
-        <div className="container" style={{ width: "800px" }}>
-          <div style={{ marginBottom: "20px" }}>
-            <div
-              className="flexcenter"
-              style={{
-                textAlign: "center",
-                alignItems: "center",
-                gap: "20px",
-              }}
-            >
-              <img
-                src={sureImage}
-                alt="Delete Emoji"
-                style={{
-                  height: "70px",
-                  width: "80px",
-                  borderRadius: "100%",
-                }}
-              />
-              <p className="title1" style={{ fontSize: "30px" }}>
-                Delete
-              </p>
-            </div>
+      <motion.div className="delete-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        <motion.div className="delete-box" initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ duration: 0.5 }}>
+          <div className="delete-header">
+            <img src={sureImage} alt="Delete Confirmation" className="delete-img" />
+            <p className="delete-title">Delete Note</p>
           </div>
-          <div className="flexcenter">
-            <p style={{ fontSize: "20px", fontWeight: "600", color: "white" }}>
-              Are you sure you want to delete the Note?
-            </p>
-          </div>
-          <div className="flexcenter">
-            <div
-              className="nodelete-button"
-              style={{ width: "100%", padding: "20px" }}
-            >
-              <button
-                style={{ cursor: "pointer", backgroundColor: "green" }}
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-            </div>
-            <div
-              className="delete-button"
-              style={{ width: "100%", padding: "20px" }}
-            >
-              <button
-                style={{ cursor: "pointer", backgroundColor: "red" }}
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+          <motion.div className="delete-message" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <p>Are you sure you want to delete this note?</p>
+          </motion.div>
+
+          <motion.div className="button-container" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="cancel-button" onClick={handleCancel}>
+              Cancel
+            </motion.button>
+            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="delete-button" onClick={handleDelete}>
+              Delete
+            </motion.button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
