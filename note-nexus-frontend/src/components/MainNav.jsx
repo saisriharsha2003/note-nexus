@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../assets/styles/main-nav.css';
 import logo from '../assets/images/logo.png'; 
 
 const MainNav = () => {
     return (
         <div>
-            <nav >
+          <nav >
           <Link to="/">
-            <img className="logo" src={logo} alt="SmartBill Logo" />
+            <img className="logo" src={logo} alt="CodeGenie Logo" />
           </Link>
           <ul>
             <li><Link to="/" >Home</Link></li>
