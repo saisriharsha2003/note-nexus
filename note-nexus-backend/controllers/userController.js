@@ -42,12 +42,12 @@ export const signin = async (req, res) => {
   try {
     const user = await User.findOne({ uname });
     if (!user) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ Error: 'Username Not Found' });
+      return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Username Not Found' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password); 
     if (!isPasswordValid) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ Error: 'Wrong Password' });
+      return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Wrong Password' });
     }
 
     const token = jwt.sign(
@@ -58,7 +58,7 @@ export const signin = async (req, res) => {
 
     res.status(StatusCodes.OK).json({ token, name: user.name, username: user.uname, message: "Login Successfull!!"  }); 
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ Error: 'Error signing in', error });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Error signing in' });
   }
 };
 
@@ -118,6 +118,8 @@ export const resetPassword = async (req, res) => {
 
 export const verifyCode = async (req, res) => {
   const {reset_email, code } = req.body;
+  console.log(reset_email);
+  console.log(code);
   try {
     const user = await User.findOne({ email: reset_email });
     if (!user || !user.resetPasswordCode) return res.status(400).json({ error: "Invalid request" });
