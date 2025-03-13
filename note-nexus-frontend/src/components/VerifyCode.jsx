@@ -24,6 +24,7 @@ const VerifyCode = () => {
     setLoading(true);
     try {
       const reset_email = localStorage.getItem("reset_email");
+      console.log(reset_email);
       if (!reset_email) {
         toast.error("Email not found", { autoClose: 1500 });
         return;

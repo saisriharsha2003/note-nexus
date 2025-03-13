@@ -39,7 +39,7 @@ const Login = () => {
         const { name, username } = response.data;
 
         localStorage.setItem("name", name);
-        localStorage.setItem("uname", username);
+        localStorage.setItem("username", username);
 
         toast.success("Redirecting to Home...", {
           position: "top-right",
@@ -51,7 +51,7 @@ const Login = () => {
         }, 2000);
       }
     } catch (err) {
-      toast.error(err.response?.data?.error || "Something went wrong.", { autoClose: 1500 });
+      toast.error(err.response.data.error || "Something went wrong.", { autoClose: 1500 });
     } finally {
       setLoading(false);
     }

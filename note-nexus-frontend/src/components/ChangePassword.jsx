@@ -11,7 +11,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import "../assets/styles/change-password.css";
 
 const ChangePassword = () => {
-  const uname = localStorage.getItem("uname");
+  const uname = localStorage.getItem("username");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openCurrent, setOpenCurrent] = useState(false);

@@ -11,7 +11,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import "../assets/styles/edit-profile.css";
 
 const EditProfile = () => {
-  const uname = localStorage.getItem("uname");
+  const uname = localStorage.getItem("username");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
