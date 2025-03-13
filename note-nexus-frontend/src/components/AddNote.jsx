@@ -46,7 +46,7 @@ const AddNote = () => {
     setLoading(true);
 
     const owner = localStorage.getItem("name");
-    const uname = localStorage.getItem("uname");
+    const uname = localStorage.getItem("username");
 
     try {
       await axios.post(`${BASE_URL}/api/user/add-note`, {
