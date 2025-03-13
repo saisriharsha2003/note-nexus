@@ -72,17 +72,16 @@ const ViewNotes = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="view-notes-wrapper"
     >
       <Nav />
       <motion.div
-        className="bg1"
+        className="viewnotes-container"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <motion.div
-          className="container view-notes-container"
+          className="viewnotes-box"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -142,29 +141,31 @@ const ViewNotes = () => {
                           )}
                         </td>
                         <td>{note.lastEditedBy}</td>
-                        <td className="action-buttons">
-                          <motion.button
-                            whileHover={{ scale: 1.2 }}
-                            onClick={() => handleView(note._id)}
-                            className="view-btn"
-                          >
-                            <i className="fa fa-eye"></i>
-                          </motion.button>
-                          <motion.button
-                            whileHover={{ scale: 1.2 }}
-                            onClick={() => handleEdit(note._id)}
-                            className="edit-btn"
-                          >
-                            <i className="fa fa-pencil"></i>
-                          </motion.button>
-                          <motion.button
-                            whileHover={{ scale: 1.2 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => handleDelete(note._id)}
-                            className="delete-btn"
-                          >
-                            <i className="fa fa-trash"></i>
-                          </motion.button>
+                        <td>
+                          <motion.div className="action-buttons">
+                            <motion.button
+                              whileHover={{ scale: 1.2 }}
+                              onClick={() => handleView(note._id)}
+                              className="view-btn"
+                            >
+                              <i className="fa fa-eye"></i>
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.2 }}
+                              onClick={() => handleEdit(note._id)}
+                              className="edit-btn"
+                            >
+                              <i className="fa fa-pencil"></i>
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.2 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleDelete(note._id)}
+                              className="delete-btn"
+                            >
+                              <i className="fa fa-trash"></i>
+                            </motion.button>
+                          </motion.div>
                         </td>
                       </motion.tr>
                     ))
@@ -193,7 +194,9 @@ const ViewNotes = () => {
                     key={i + 1}
                     whileHover={{ scale: 1.1 }}
                     onClick={() => changePage(i + 1)}
-                    className={`pagination-btn ${currentPage === i + 1 ? "active" : ""}`}
+                    className={`pagination-btn ${
+                      currentPage === i + 1 ? "active" : ""
+                    }`}
                   >
                     {i + 1}
                   </motion.button>
