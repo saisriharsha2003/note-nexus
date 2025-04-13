@@ -9,7 +9,6 @@ services:
     image: saisriharsha2005/note-nexus-backend
     environment:
       - CHOKIDAR_USEPOLLING=true
-    env_file: ./note-nexus-backend/.env
     volumes:
       - ./note-nexus-backend:/note-nexus/backend
     networks:

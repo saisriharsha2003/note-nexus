@@ -1,5 +1,5 @@
 # Use an official Node.js image instead of Alpine
-FROM node:18
+FROM node:23-slim
 
 # Set the working directory inside the container
 WORKDIR /note-nexus-frontend
@@ -8,7 +8,7 @@ WORKDIR /note-nexus-frontend
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --no-optional && npm install @rollup/rollup-linux-x64-gnu@4.39.0
 
 # Copy the entire frontend source code
 COPY . .
@@ -20,4 +20,4 @@ ENV CHOKIDAR_USEPOLLING=true
 EXPOSE 3000
 
 # Start the React app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
