@@ -1,5 +1,5 @@
 # Stage 1: Build the React App
-FROM alpine:3.18 AS development
+FROM alpine:3.21 AS development
 
 # Install Node.js, npm, and other necessary tools
 RUN apk add --no-cache nodejs npm
@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the React App with Nginx
-FROM nginx:stable-alpine
+FROM nginx:1.28.0-alpine-slim
 
 # Copy built files to Nginx HTML directory
 COPY --from=development /note-nexus/frontend/build /usr/share/nginx/html

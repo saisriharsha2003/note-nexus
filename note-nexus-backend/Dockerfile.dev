@@ -1,5 +1,5 @@
 # Stage 1: Base Image for Development
-FROM alpine:3.18 AS development
+FROM alpine:3.21 AS development
 
 # Install Node.js, npm, and other necessary tools
 RUN apk add --no-cache nodejs npm
