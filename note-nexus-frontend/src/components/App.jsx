@@ -15,6 +15,7 @@ import ResetPassword from "./ResetPassword";
 import VerifyCode from "./VerifyCode";
 import NewPassword from "./NewPassword";
 import { ToastContainer } from "react-toastify";
+import NotificationsPage from "./NotificationsPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/new-password" element={<NewPassword />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
       </Routes>
       <ToastContainer />
     </div>
