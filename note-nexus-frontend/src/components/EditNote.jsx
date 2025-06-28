@@ -17,13 +17,15 @@ const EditNote = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: "",
+    noteId: "",
     content: "",
-    lastEditedBy: "",
     owner: "",
+    lastEditedBy: "",
     visibility: "private",
   });
 
   const user = localStorage.getItem("username");
+  const name = localStorage.getItem("name");
 
   const modules = {
     toolbar: [
@@ -78,10 +80,11 @@ const EditNote = () => {
 
   const handleSave = async () => {
     try {
+      formData.noteId = id;
+      formData.lastEditedBy = user;
       const response = await axios.put(`${BASE_URL}/api/user/edit-note`, {
         ...formData,
-        id: id,
-        lastEditedBy: localStorage.getItem("name"),
+        name
       });
       toast.success(response.data.message, {
         position: "top-right",
@@ -90,11 +93,18 @@ const EditNote = () => {
       setTimeout(() => {
         navigate("/view-notes");
       }, 2000);
-    } catch (error) {
-      toast.error("Failed to save note.", {
-        position: "top-right",
-        autoClose: 1500,
-      });
+    } catch (err) {
+      if (err.response?.status === 403) {
+        toast.error(err.response.data.message, {
+          position: "top-right",
+          autoClose: 1500,
+        });
+      } else {
+        toast.error("Something went wrong while updating the note.", {
+          position: "top-right",
+          autoClose: 1500,
+        });
+      }
     }
   };
 
