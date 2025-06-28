@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 });
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
 
 app.use("/api/user", userRouter);
