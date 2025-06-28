@@ -1,39 +1,76 @@
 services:
-  backend:
+ 
+  note-nexus-redis:
+    image: redis:7-alpine
+    container_name: note-nexus-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - network
+
+  note-nexus-database:
+    image: mongo
+    container_name: note-nexus-database
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_DATABASE}
+    command: mongod --auth
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo-init/init-mongo.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+
+    networks:
+      - network
+      
+  note-nexus-backend:
     build:
       context: ./note-nexus-backend
       dockerfile: Dockerfile.dev
-    restart: unless-stopped
     image: saisriharsha2005/note-nexus-backend
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+    container_name: note-nexus-backend
+    restart: unless-stopped
+    env_file: .env
     volumes:
       - ./note-nexus-backend:/note-nexus-backend
       - /note-nexus-backend/node_modules  
     networks:
       - network
     ports:
-      - 8080:8080
+      - "8081:8080"
+    depends_on:
+      - note-nexus-database
+      - note-nexus-redis
 
-  frontend:
-    build: 
+  note-nexus-frontend:
+    build:
       context: ./note-nexus-frontend
       dockerfile: Dockerfile.dev
     image: saisriharsha2005/note-nexus-frontend
+    container_name: note-nexus-frontend
     restart: unless-stopped
-    volumes: 
+    env_file: .env
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
       - ./note-nexus-frontend:/note-nexus-frontend
       - /note-nexus-frontend/node_modules  
-    environment:
-      - CHOKIDAR_USEPOLLING=true 
     networks:
       - network
-    env_file: ./note-nexus-frontend/.env
-    depends_on:
-      - backend
     ports:
-      - 3000:5173
+      - "3000:5173"
+    depends_on:
+      - note-nexus-backend
 
 networks:
   network:
     driver: bridge
+
+volumes:
+  mongo_data:
