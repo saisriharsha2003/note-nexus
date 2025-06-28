@@ -24,10 +24,10 @@
 	right: 4%;
 	border-radius: 10px;
 	width: 320px;
-	background: #CCBA78;
 	max-height:0px;
 	overflow: hidden;
 	transition: max-height 0.5s;
+	z-index: 9999;
 }
 .ext
 {
@@ -36,23 +36,24 @@
 .sub-menu-wrap.open-menu
 {
 	max-height:400px;
+
 }
-.sub-menu-wrap.open-menu
-{
-	max-height:400px;
-}
+
 .sub-menu
 {
-	background: black;
-	margin: 5px;
+	background: #121212;
 	border-radius:10px;
-	padding: 10px;
+	margin: 1px;
+	padding: 12px;
+	backdrop-filter: blur(10px); 
+	
 }
 .user-info
 {
 	display: flex;
 	align-items: center;
 	padding: 10px;
+	
 }
 .user-info img
 {
@@ -67,6 +68,7 @@
 	text-decoration: none;
 	color: black;
 	margin: 12px 12px;
+	
 }
 .sub-menu-link p
 {

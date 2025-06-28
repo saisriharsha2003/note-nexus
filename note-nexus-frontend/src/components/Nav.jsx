@@ -8,7 +8,10 @@ import logout from "../assets/images/logout.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/images/logo.png";
+import change_pwd from "../assets/images/change-pwd.png";
 import "../assets/styles/nav.css";
+import Notification from './NotificationsPage'; 
+import NotificationIcon from "./NotificationIcon";
 
 const Nav = () => {
   const [userName, setUserName] = useState("");
@@ -61,9 +64,9 @@ const Nav = () => {
             <Link to="/add-note">Add Note</Link>
           </li>
         </ul>
-
+        <NotificationIcon />
         <img src={user} className="user-pic" alt="User" onClick={toggleMenu} />
-
+        
         <div className="sub-menu-wrap" id="subMenu">
           <div className="sub-menu">
             <div className="user-info">
@@ -88,7 +91,7 @@ const Nav = () => {
             </Link>
             <Link to="/change-password" className="sub-menu-link">
               <img
-                src={edit}
+                src={change_pwd}
                 alt="Change Password"
                 style={{ width: "50px", height: "50px" }}
               />
