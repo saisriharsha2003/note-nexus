@@ -22,6 +22,7 @@ const noteSchema = new mongoose.Schema({
     required: [true, 'Please provide the visibility for the note'],
   },
   lastEditedBy: { type: String, default: null },
+  collaborators: [{ type: String }]
 }, { timestamps: true });
 
 const Note = mongoose.model('Note', noteSchema);
