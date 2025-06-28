@@ -64,7 +64,9 @@ const AddNote = () => {
         }, 1000);
       }, 1000);
     } catch (error) {
-      toast.error(error.response?.data?.error || "Error adding note", { autoClose: 1500 });
+      toast.error(error.response?.data?.error || "Error adding note", {
+        autoClose: 1500,
+      });
     } finally {
       setLoading(false);
     }
@@ -79,13 +81,25 @@ const AddNote = () => {
         exit={{ opacity: 0 }}
         className="addnote-container"
       >
-        <motion.div className="addnote-box" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+        <motion.div
+          className="addnote-box"
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+        >
           <h2 className="title">Create a New Note</h2>
           <form onSubmit={handleSubmit} className="addnote-form">
+            <label
+              className="label"
+              style={{ alignContent: "left", textAlign: "left" }}
+            >
+              Title
+            </label>
 
-            <label className="label" style={{alignContent: "left", textAlign: "left"}}>Title</label>
-
-            <motion.div className="input-group" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+            <motion.div
+              className="input-group"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+            >
               <FaHeading className="icon" />
               <input
                 type="text"
@@ -96,10 +110,18 @@ const AddNote = () => {
                 required
               />
             </motion.div>
-                        <label className="label" style={{alignContent: "left", textAlign: "left"}}>Content</label>
+            <label
+              className="label"
+              style={{ alignContent: "left", textAlign: "left" }}
+            >
+              Content
+            </label>
 
-            <motion.div className="input-group quill-container" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
-              
+            <motion.div
+              className="input-group quill-container"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+            >
               <ReactQuill
                 value={formData.content}
                 onChange={handleContentChange}
@@ -109,7 +131,11 @@ const AddNote = () => {
               />
             </motion.div>
 
-            <motion.div className="visibility-options" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+            <motion.div
+              className="visibility-options"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+            >
               <motion.label
                 whileHover={{ scale: 1.1 }}
                 className={`visibility-label ${
@@ -143,7 +169,11 @@ const AddNote = () => {
               </motion.label>
             </motion.div>
 
-            <motion.button whileHover={{ scale: 1.1 }} type="submit" className="addnote-btn">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              type="submit"
+              className="addnote-btn"
+            >
               {loading ? "Adding Note..." : "Add Note"}
             </motion.button>
           </form>

@@ -258,7 +258,9 @@ export const edit_note = async (req, res) => {
 
     if (!note) return res.status(404).json({ message: "Note not found" });
 
-    const isOwner = note.owner === lastEditedBy;
+    console.log(owner, name, note.owner_username);
+
+    const isOwner = note.owner_username === lastEditedBy;
     let updatedFields = [];
 
     if (title && title !== note.title) {

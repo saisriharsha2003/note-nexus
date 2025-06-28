@@ -1,7 +1,19 @@
 import { createClient } from 'redis';
+import dotenv from 'dotenv';
 
-export const publisher = createClient({ url: 'redis://note-nexus-redis:6379' });
-export const subscriber = createClient({ url: 'redis://note-nexus-redis:6379' });
+dotenv.config();
 
-await publisher.connect();
-await subscriber.connect();
+const redisUrl = process.env.REDIS_URL;
+
+export const publisher = createClient({ url: redisUrl });
+export const subscriber = createClient({ url: redisUrl });
+
+export const connectRedis = async () => {
+  try {
+    await publisher.connect();
+    await subscriber.connect();
+    console.log('✅ Redis connected');
+  } catch (error) {
+    console.error('❌ Redis connection error:', error);
+  }
+};
