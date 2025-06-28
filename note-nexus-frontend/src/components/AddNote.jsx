@@ -82,6 +82,9 @@ const AddNote = () => {
         <motion.div className="addnote-box" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
           <h2 className="title">Create a New Note</h2>
           <form onSubmit={handleSubmit} className="addnote-form">
+
+            <label className="label" style={{alignContent: "left", textAlign: "left"}}>Title</label>
+
             <motion.div className="input-group" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
               <FaHeading className="icon" />
               <input
@@ -93,7 +96,10 @@ const AddNote = () => {
                 required
               />
             </motion.div>
+                        <label className="label" style={{alignContent: "left", textAlign: "left"}}>Content</label>
+
             <motion.div className="input-group quill-container" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+              
               <ReactQuill
                 value={formData.content}
                 onChange={handleContentChange}
