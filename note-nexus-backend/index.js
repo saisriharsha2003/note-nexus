@@ -1,33 +1,43 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import { MONGODB_URL } from "./config.js";
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import http from 'http';
+import { Server } from 'socket.io';
+import { subscriber } from './redis.js';
+import userRouter from './routes/Routes.js';
+
+dotenv.config();
 
 const app = express();
-
-const port = 8080;
-
-app.use(express.json());
-app.use(cors());
-
-import userRouter from "./routes/Routes.js";
-
-const mongoURI = MONGODB_URL;
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-
-.then(() => {
-  console.log("Connected to MongoDB Atlas!");
-})
-
-.catch((error) => {
-  console.error("Error connecting to MongoDB Atlas:", error);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000", 
+    methods: ["GET", "POST"]
+  }
 });
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+});
+
+await subscriber.subscribe('note_updates', (message) => {
+  const data = JSON.parse(message);
+  console.log("Redis Update:", data.message);
+  io.emit('notification', data); 
+});
+
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.json());
+
+mongoose.connect(process.env.MONGODB_URL)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB Error:", err));
 
 app.use("/api/user", userRouter);
 
-const server = app.listen(port, "0.0.0.0", () => {
-  console.log("Server started on port "+port);
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
