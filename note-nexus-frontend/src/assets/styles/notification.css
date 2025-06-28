@@ -1,0 +1,111 @@
+.notification-container {
+  background: url(../images/background_image.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+}
+
+.notification-box {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 12px;
+  padding: 30px 40px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 0 15px #ccba78;
+  color: white;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.notification-box h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #ccba78;
+  font-weight: bold;
+}
+
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-item {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 15px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+  border-left: 5px solid #ccba78;
+  position: relative;
+}
+
+.notification-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 12px #ccba78;
+}
+
+.notification-message {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+}
+
+.notification-date {
+  font-size: 13px;
+  color: #bbb;
+  margin-top: 6px;
+  text-align: right;
+}
+
+.notification-note-title {
+  font-weight: 800;
+  color: #CCBA78;
+  margin-bottom: 4px;
+  font-size: 16px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid #ccba78;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-btn:hover {
+  background-color: #ccba78;
+  color: black;
+}
+
+.pagination-btn.active {
+  background-color: #ccba78;
+  color: black;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
