@@ -31,7 +31,11 @@ const Login = () => {
       const response = await axios.post(
         `${BASE_URL}/api/user/login`,
         formData,
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       toast.success(response.data.message, { autoClose: 1500 });
@@ -51,7 +55,9 @@ const Login = () => {
         }, 2000);
       }
     } catch (err) {
-      toast.error(err.response.data.error || "Something went wrong.", { autoClose: 1500 });
+      toast.error(err.response.data.error || "Something went wrong.", {
+        autoClose: 1500,
+      });
     } finally {
       setLoading(false);
     }
@@ -60,25 +66,61 @@ const Login = () => {
   return (
     <div>
       <MainNav />
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="login-container">
-        <motion.div className="login-box" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="login-container"
+      >
+        <motion.div
+          className="login-box"
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+        >
           <h2 className="title">Login to NoteNexus</h2>
           <form onSubmit={handleSubmit} className="login-form">
             <div className="input-group">
               <FaUser className="icon" />
-              <input type="text" name="uname" placeholder="Username" value={formData.uname} onChange={handleChange} required />
+              <input
+                type="text"
+                name="uname"
+                placeholder="Username"
+                value={formData.uname}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="input-group">
               <FaLock className="icon" />
-              <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <motion.button whileHover={{ scale: 1.1 }} type="submit" className="login-btn">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              type="submit"
+              className="login-btn"
+            >
               {loading ? "Logging in..." : "Login"}
             </motion.button>
           </form>
-          <p className="signup-link">Don't have an account? <a className="a-link" href="/register">Register</a></p>
+          <p className="signup-link">
+            Don't have an account?{" "}
+            <a className="a-link" href="/register">
+              Register
+            </a>
+          </p>
           <div className="password-options">
-            <motion.p whileHover={{ scale: 1.1 }} className="forgot-password" onClick={() => navigate("/reset-password")}>
+            <motion.p
+              whileHover={{ scale: 1.1 }}
+              className="forgot-password"
+              onClick={() => navigate("/reset-password")}
+            >
               Forgot Password?
             </motion.p>
           </div>
