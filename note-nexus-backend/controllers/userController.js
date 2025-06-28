@@ -1,18 +1,28 @@
 import { StatusCodes } from "http-status-codes";
 import User from "../models/User.js";
-import Note from "../models/Note.js"; 
+import Note from "../models/Note.js";
 import jwt from "jsonwebtoken";
-import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, EMAIL_USER, JWT_SECRET, REDIRECT_URI } from "../config.js";
 import bcrypt from "bcryptjs";
+import Notification from "../models/Notification.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { OAuth2Client } from "google-auth-library";
+import { publisher } from "../redis.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const EMAIL_USER = process.env.EMAIL_USER;
+const JWT_SECRET = process.env.JWT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 export const signup = async (req, res) => {
   const { name, email, mobile, uname, password } = req.body;
 
   try {
-
     const existingUser = await User.findOne({ uname });
     if (existingUser) {
       return res.status(400).json({ message: "Username already exist" });
@@ -42,23 +52,36 @@ export const signin = async (req, res) => {
   try {
     const user = await User.findOne({ uname });
     if (!user) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Username Not Found' });
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: "Username Not Found" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password); 
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Wrong Password' });
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: "Wrong Password" });
     }
 
     const token = jwt.sign(
       { userId: user._id, username: user.username },
       JWT_SECRET,
-      { expiresIn: '1d' }
+      { expiresIn: "1d" }
     );
 
-    res.status(StatusCodes.OK).json({ token, name: user.name, username: user.uname, message: "Login Successfull!!"  }); 
+    res
+      .status(StatusCodes.OK)
+      .json({
+        token,
+        name: user.name,
+        username: user.uname,
+        message: "Login Successfull!!",
+      });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Error signing in' });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: "Error signing in" });
   }
 };
 
@@ -77,7 +100,7 @@ async function sendResetEmail(email, resetCode) {
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
-        accessToken: accessToken.token, 
+        accessToken: accessToken.token,
       },
     });
 
@@ -87,7 +110,6 @@ async function sendResetEmail(email, resetCode) {
       subject: "Password Reset Code",
       text: `Your password reset code is: ${resetCode}`,
     });
-
   } catch (error) {
     console.error("❌ Error sending email:", error);
     throw new Error("Email could not be sent.");
@@ -104,7 +126,7 @@ export const resetPassword = async (req, res) => {
     const hashedCode = await bcrypt.hash(resetCode, 10);
 
     user.resetPasswordCode = hashedCode;
-    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; 
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
     await sendResetEmail(email, resetCode);
@@ -117,12 +139,13 @@ export const resetPassword = async (req, res) => {
 };
 
 export const verifyCode = async (req, res) => {
-  const {reset_email, code } = req.body;
+  const { reset_email, code } = req.body;
   console.log(reset_email);
   console.log(code);
   try {
     const user = await User.findOne({ email: reset_email });
-    if (!user || !user.resetPasswordCode) return res.status(400).json({ error: "Invalid request" });
+    if (!user || !user.resetPasswordCode)
+      return res.status(400).json({ error: "Invalid request" });
 
     const isMatch = await bcrypt.compare(code, user.resetPasswordCode);
     if (!isMatch || Date.now() > user.resetPasswordExpires) {
@@ -133,7 +156,6 @@ export const verifyCode = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error verifying code" });
   }
-
 };
 
 export const newPassword = async (req, res) => {
@@ -151,61 +173,55 @@ export const newPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error resetting password" });
   }
-
 };
 
 export const add_note = async (req, res) => {
   try {
-
     const { title, content, visibility } = req.body;
-    
-    const owner = req.body.owner ;
-    const uname = req.body.uname ;
 
-    if (!title || !content || !visibility) {
-      return res.status(400).json({ message: "Missing required fields: title, content, visibility" });
-    }
+    const owner = req.body.owner;
+    const owner_username = req.body.uname;
 
-    if (!owner || !uname) {
-      return res.status(400).json({ message: "Owner or Username is missing" });
-    }
-
-    const newNote = new Note({
+    const newNote = await Note.create({
       title,
       content,
       owner,
-      owner_username: uname,
-      visibility, 
-      lastEditedBy: owner
+      owner_username: owner_username,
+      visibility,
+      lastEditedBy: owner,
     });
 
-    const savedNote = await newNote.save();
+    newNote.collaborators = [owner_username];
+    await newNote.save();
 
-    res.status(201).json({
-      message: 'Note added successfully',
-      note: savedNote,
-    });
+    
+    const notification = {
+      message: `New ${visibility} note titled "${title}" was created by you`,
+      noteId: newNote._id,
+      createdBy: owner_username,
+      recipients: [owner_username],
+    };
 
+    await Notification.create(notification);
+    await publisher.publish("note_updates", JSON.stringify(notification));
+    
+
+    res
+      .status(201)
+      .json({ message: "Note created successfully.", note: newNote });
   } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      message: 'Error adding note',
-      error: error.message,
-      stack: error.stack, 
-    });
+    res
+      .status(500)
+      .json({ message: "Error creating note.", error: error.message });
   }
 };
 
 export const view_notes = async (req, res) => {
   try {
-    const uname = req.query.username; 
-    
+    const uname = req.query.username;
+
     const notes = await Note.find({
-      $or: [
-        { visibility: 'public' }, 
-        { owner_username: uname },
-      ]
+      $or: [{ visibility: "public" }, { owner_username: uname }],
     });
 
     res.status(200).json({ notes, message: "Fetched All Notes!" });
@@ -214,7 +230,6 @@ export const view_notes = async (req, res) => {
   }
 };
 
-
 export const view_note_by_id = async (req, res) => {
   const { noteid } = req.params;
 
@@ -222,42 +237,90 @@ export const view_note_by_id = async (req, res) => {
     const note = await Note.findOne({ _id: noteid });
 
     if (!note) {
-      return res.status(404).json({ message: 'Note not found' });
+      return res.status(404).json({ message: "Note not found" });
     }
 
-    res.json({ note, message: 'Note fetched successfully' });
+    res.json({ note, message: "Note fetched successfully" });
   } catch (error) {
-    console.error('Error fetching note:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error fetching note:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const edit_note = async (req, res) => {
-  const { id, title, content, lastEditedBy, visibility } = req.body;
-
   try {
-    const updatedNote = await Note.findByIdAndUpdate(
-      id,
-      { title, content, lastEditedBy, visibility}, 
-      { new: true, runValidators: true }
-    );
+    const { title, noteId, content, owner, lastEditedBy, visibility } =
+      req.body;
+    const name = req.body.name;
 
-    if (!updatedNote) {
-      return res.status(404).json({ message: 'Note not found.' });
+    const note = await Note.findById(noteId);
+    const originalTitle = note.title;
+
+    if (!note) return res.status(404).json({ message: "Note not found" });
+
+    const isOwner = note.owner === lastEditedBy;
+    let updatedFields = [];
+
+    if (title && title !== note.title) {
+      updatedFields.push(
+        `changed the title from "${note.title}" to "${title}"`
+      );
+      note.title = title;
     }
 
-    return res.status(200).json({ 
-      message: 'Note updated successfully.', 
-      note: updatedNote 
-    });
-  } catch (error) {
-    console.error("Error updating note:", error);
-    return res.status(500).json({ message: 'Error updating note.', error: error.message });
+    if (content && content !== note.content) {
+      updatedFields.push("updated the content");
+      note.content = content;
+    }
+
+    if (visibility && visibility !== note.visibility) {
+      if (!isOwner) {
+        return res
+          .status(403)
+          .json({ message: "Only the owner can change visibility" });
+      }
+      updatedFields.push(
+        `changed the visibility from "${note.visibility}" to "${visibility}"`
+      );
+      note.visibility = visibility;
+    }
+
+    if (updatedFields.length === 0) {
+      return res.status(400).json({ message: "No valid fields updated" });
+    }
+
+    note.lastEditedBy = lastEditedBy;
+
+    if (!note.collaborators.includes(lastEditedBy)) {
+      note.collaborators.push(lastEditedBy);
+    }
+
+    await note.save();
+
+    const recipients = note.collaborators;
+
+    const message = `${name} (${lastEditedBy}) ${updatedFields.join(" and ")}`;
+
+    const notification = {
+      message,
+      noteId: note._id,
+      noteTitle: originalTitle,
+      createdBy: lastEditedBy,
+      recipients,
+    };
+
+    await Notification.create(notification);
+    await publisher.publish("note_updates", JSON.stringify(notification));
+
+    res.status(200).json({ message: "Note updated successfully", note });
+  } catch (err) {
+    console.error("Error editing note:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const delete_note = async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params;
   const { username } = req.query;
 
   try {
@@ -284,7 +347,6 @@ export const delete_note = async (req, res) => {
       message: "Note successfully deleted",
     });
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: "Server error. Could not delete note",
@@ -292,10 +354,42 @@ export const delete_note = async (req, res) => {
   }
 };
 
+export const getNotifications = async (req, res) => {
+  console.log("Fetching notifications for user:", req.params.username);
+  const { username } = req.params;
+  try {
+    const notifications = await Notification.find({
+      recipients: username,
+    }).sort({ createdAt: -1 });
+
+    const unseenCount = notifications.filter(
+      (n) => !n.seenBy.includes(username)
+    ).length;
+
+    res.status(200).json({ notifications, unseenCount });
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ message: "Error fetching notifications", error });
+  }
+};
+
+export const resetNotificationCount = async (req, res) => {
+  const { username } = req.params;
+  try {
+    await Notification.updateMany(
+      { recipients: username },
+      { $addToSet: { seenBy: username } }
+    );
+    res.status(200).json({ message: "Notification count reset" });
+  } catch (error) {
+    console.error("Error resetting notifications:", error);
+    res.status(500).json({ message: "Failed to reset notifications", error });
+  }
+};
 
 export const getUserProfile = async (req, res) => {
   try {
-    const { uname } = req.params; 
+    const { uname } = req.params;
 
     const user = await User.findOne({ uname });
 
@@ -311,28 +405,29 @@ export const getUserProfile = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching user profile", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching user profile", error: error.message });
   }
 };
 
 export const updateUserProfile = async (req, res) => {
-  const { uname } = req.params; 
-  const { name, email, mobile, newUname } = req.body; 
+  const { uname } = req.params;
+  const { name, email, mobile, newUname } = req.body;
 
-   
   try {
     const user = await User.findOne({ uname });
 
     const oname = user.name;
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (newUname) {
       const existingUser = await User.findOne({ uname: newUname });
       if (existingUser) {
-        return res.status(400).json({ message: 'Username already taken' });
+        return res.status(400).json({ message: "Username already taken" });
       }
     }
 
@@ -343,11 +438,11 @@ export const updateUserProfile = async (req, res) => {
 
     const updatedUser = await user.save();
 
-    const updatedName = name || user.name; 
-    const updatedUsername = newUname || uname; 
+    const updatedName = name || user.name;
+    const updatedUsername = newUname || uname;
 
     await Note.updateMany(
-      { owner_username: uname }, 
+      { owner_username: uname },
       {
         $set: {
           owner: updatedName,
@@ -358,31 +453,27 @@ export const updateUserProfile = async (req, res) => {
 
     await Note.updateMany(
       {
-        $or: [
-          { lastEditedBy: oname }, 
-          { lastEditedBy: null }, 
-        ],
+        $or: [{ lastEditedBy: oname }, { lastEditedBy: null }],
       },
       {
         $set: {
-          lastEditedBy: updatedName, 
+          lastEditedBy: updatedName,
         },
       }
     );
-   
+
     return res.status(200).json({
-      message: 'Profile and related notes updated successfully',
+      message: "Profile and related notes updated successfully",
       user: updatedUser,
     });
   } catch (error) {
-    console.error('Error updating profile:', error);
+    console.error("Error updating profile:", error);
     return res.status(500).json({
-      message: 'Error updating profile',
+      message: "Error updating profile",
       error: error.message,
     });
   }
 };
-
 
 export const updatePassword = async (req, res) => {
   try {
@@ -408,7 +499,8 @@ export const updatePassword = async (req, res) => {
     res.status(200).json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating password", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating password", error: error.message });
   }
 };
-
