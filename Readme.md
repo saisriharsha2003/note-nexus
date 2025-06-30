@@ -13,6 +13,12 @@ A **collaborative note-taking application** where users can register, log in, an
 - **View Notes**: Displays public notes from all users and private notes of the current user.
 - **Edit and Delete Notes**: Edit or delete notes with ownership-based access control.
 - **Responsive Design**: Accessible and user-friendly across devices.
+- **Collaborative Notifications** *(New Feature)*:  
+  - Whenever a user creates a note, they receive a confirmation notification with its details.  
+  - If the note is marked as **Public**, any user who edits that note becomes a **collaborator**.  
+  - All collaborators are automatically notified of subsequent edits.  
+  - Notifications are delivered in real-time if collaborators are online, or shown upon next login if they are offline.  
+  - This fosters seamless collaboration and keeps all contributors informed of changes.
 
 ---
 
