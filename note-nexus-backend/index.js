@@ -11,11 +11,14 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
 const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000", 
-    methods: ["GET", "POST"]
-  }
+  cors: corsOptions,
 });
 
 io.on("connection", (socket) => {
@@ -25,15 +28,19 @@ io.on("connection", (socket) => {
 await subscriber.subscribe('note_updates', (message) => {
   const data = JSON.parse(message);
   console.log("Redis Update:", data.message);
-  io.emit('notification', data); 
+  io.emit('notification', data);
 });
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URL)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.error("MongoDB Error:", err));
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB Connected"))
+.catch((err) => console.error("MongoDB Error:", err));
 
 app.use("/api/user", userRouter);
 
