@@ -1,14 +1,14 @@
 #!/bin/bash
 
-mongosh <<'EOF'
-use note-nexus
+mongosh <<EOF
+use ${MONGO_INITDB_DATABASE}
 
-const user = db.getUser("arjunsai2035");
+const user = db.getUser("${MONGO_INITDB_ROOT_USERNAME}");
 if (!user) {
   db.createUser({
-    user: "arjunsai2035",
-    pwd: "ArjunSai@2035",
-    roles: [{ role: "readWrite", db: "note-nexus" }]
+    user: "${MONGO_INITDB_ROOT_USERNAME}",
+    pwd: "${MONGO_INITDB_ROOT_PASSWORD}",
+    roles: [{ role: "readWrite", db: "${MONGO_INITDB_DATABASE}" }]
   });
 }
 
