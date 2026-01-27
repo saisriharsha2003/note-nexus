@@ -7,7 +7,7 @@ import { BASE_URL } from "../config";
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const notificationsPerPage = 4;
+  const notificationsPerPage = 2;
 
   useEffect(() => {
     const fetchNotifications = async () => {
