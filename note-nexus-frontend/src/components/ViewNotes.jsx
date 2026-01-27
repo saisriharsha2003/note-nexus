@@ -3,11 +3,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "../components/Nav";
-import { BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
 import { motion } from "framer-motion";
 import "../assets/styles/viewnotes.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ViewNotes = () => {
   const [notes, setNotes] = useState([]);

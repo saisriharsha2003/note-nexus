@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../config";
 import Nav from "../components/Nav";
 import BeatLoader from "react-spinners/BeatLoader";
 import "../assets/styles/change-password.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ChangePassword = () => {
   const uname = localStorage.getItem("username");

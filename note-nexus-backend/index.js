@@ -12,6 +12,13 @@ dotenv.config();
 const app = express();
 
 const server = http.createServer(app);
+
+const corsOptions = {
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",

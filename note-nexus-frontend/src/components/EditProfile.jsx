@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaPhone, FaUserEdit } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../config";
 import Nav from "../components/Nav";
 import BeatLoader from "react-spinners/BeatLoader";
 import "../assets/styles/edit-profile.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditProfile = () => {
   const uname = localStorage.getItem("username");

@@ -3,11 +3,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "../components/Nav";
-import { BASE_URL } from "../config";
 import { useParams, useNavigate } from "react-router-dom";
 import sureImage from "../assets/images/sure.png";
 import { motion } from "framer-motion";
 import "../assets/styles/deletenote.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const DeleteNote = () => {
   const { id } = useParams();

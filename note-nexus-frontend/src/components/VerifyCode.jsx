@@ -4,10 +4,11 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { BASE_URL } from "../config";
 import { motion } from "framer-motion";
 import "../assets/styles/verify-code.css";
 import MainNav from "./MainNav";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const VerifyCode = () => {
   const [code, setCOde] = useState("");

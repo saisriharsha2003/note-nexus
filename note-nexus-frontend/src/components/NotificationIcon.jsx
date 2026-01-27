@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL } from "../config";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const NotificationIcon = () => {
   const [unreadCount, setUnreadCount] = useState(0);
