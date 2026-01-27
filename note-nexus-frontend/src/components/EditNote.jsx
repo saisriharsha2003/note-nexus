@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
-import { BASE_URL } from "../config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactQuill from "react-quill";
@@ -10,6 +9,8 @@ import "react-quill/dist/quill.snow.css";
 import { motion } from "framer-motion";
 import { FaHeading, FaLock, FaGlobe } from "react-icons/fa";
 import "../assets/styles/editnote.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditNote = () => {
   const { id } = useParams();

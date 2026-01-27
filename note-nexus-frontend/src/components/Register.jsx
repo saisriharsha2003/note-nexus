@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaPhone, FaLock } from "react-icons/fa";
 import "../assets/styles/register.css";
 import MainNav from "./MainNav";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Register = () => {
   const navigate = useNavigate();

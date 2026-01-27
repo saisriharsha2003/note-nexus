@@ -4,10 +4,11 @@ import MainNav from "./MainNav";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../config";
 import { motion } from "framer-motion";
 import { FaUser, FaLock } from "react-icons/fa";
 import "../assets/styles/login.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
   const [formData, setFormData] = useState({ uname: "", password: "" });

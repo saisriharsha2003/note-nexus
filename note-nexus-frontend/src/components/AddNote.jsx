@@ -8,8 +8,9 @@ import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { FaHeading, FaLock, FaGlobe } from "react-icons/fa";
 import Nav from "../components/Nav";
-import { BASE_URL } from "../config";
 import "../assets/styles/addnote.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AddNote = () => {
   const navigate = useNavigate();

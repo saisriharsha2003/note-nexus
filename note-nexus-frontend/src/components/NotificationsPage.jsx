@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../assets/styles/notification.css";
 import Nav from "./Nav";
-import { BASE_URL } from "../config";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
