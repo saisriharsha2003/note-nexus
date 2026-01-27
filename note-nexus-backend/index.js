@@ -21,16 +21,17 @@ const corsOptions = {
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+    origin: corsOptions.origin,
+    methods: corsOptions.methods,
+  },
 });
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 });
 
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/user", userRouter);
