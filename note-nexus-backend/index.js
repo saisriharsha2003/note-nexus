@@ -1,13 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import { subscriber, connectRedis } from './redis.js';
 import userRouter from './routes/Routes.js';
-
-dotenv.config();
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 
 const app = express();
 
