@@ -1,15 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
-import { subscriber } from './redis.js';
+import { subscriber, connectRedis } from './redis.js';
 import userRouter from './routes/Routes.js';
-
-dotenv.config();
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
 
 const app = express();
+
 const server = http.createServer(app);
 
 const corsOptions = {
@@ -19,33 +19,44 @@ const corsOptions = {
 };
 
 const io = new Server(server, {
-  cors: corsOptions,
+  cors: {
+    origin: corsOptions.origin,
+    methods: corsOptions.methods,
+  },
 });
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 });
 
-await subscriber.subscribe('note_updates', (message) => {
-  const data = JSON.parse(message);
-  console.log("Redis Update:", data.message);
-  io.emit('notification', data);
-});
-
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); 
+app.options("*", cors(corsOptions));
 app.use(express.json());
-
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB Connected"))
-.catch((err) => console.error("MongoDB Error:", err));
 
 app.use("/api/user", userRouter);
 
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+mongoose.connect(process.env.MONGODB_URL)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+const PORT = process.env.PORT || 8081;
+
+const startServer = async () => {
+  server.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+
+  connectRedis()
+    .then(async () => {
+      await subscriber.subscribe("note_updates", (message) => {
+        const data = JSON.parse(message);
+        console.log("📩 Redis Update:", data.message);
+        io.emit("notification", data);
+      });
+    })
+    .catch(() => {
+      console.warn("⚠️ Redis unavailable, notifications disabled");
+    });
+};
+
+startServer();
