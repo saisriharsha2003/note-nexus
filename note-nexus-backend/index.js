@@ -43,17 +43,21 @@ mongoose.connect(process.env.MONGODB_URL)
 const PORT = process.env.PORT || 8081;
 
 const startServer = async () => {
-  await connectRedis();
-
-  await subscriber.subscribe('note_updates', (message) => {
-    const data = JSON.parse(message);
-    console.log("📩 Redis Update:", data.message);
-    io.emit('notification', data);
-  });
-
   server.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
   });
+
+  connectRedis()
+    .then(async () => {
+      await subscriber.subscribe("note_updates", (message) => {
+        const data = JSON.parse(message);
+        console.log("📩 Redis Update:", data.message);
+        io.emit("notification", data);
+      });
+    })
+    .catch(() => {
+      console.warn("⚠️ Redis unavailable, notifications disabled");
+    });
 };
 
 startServer();
